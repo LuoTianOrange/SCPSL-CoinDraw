@@ -11,6 +11,12 @@ using System;
 using PlayerRoles;
 using Exiled.API.Features.Roles;
 using Exiled.Events.EventArgs.Map;
+using CommandSystem.Commands.RemoteAdmin;
+using PluginAPI.Core.Zones;
+using System.Runtime.InteropServices;
+using CommandSystem;
+using RemoteAdmin;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
 namespace SCP_1
 {
@@ -18,7 +24,7 @@ namespace SCP_1
     {
         public override string Name => "橘橘的硬币抽奖插件";
         public override string Author => "灯火橘Channel";
-        public override Version Version => new Version(1, 0, 0);
+        public override Version Version => new Version(1, 0, 1);
 
         private EventHandlers handler;
         public override void OnEnabled()
@@ -60,13 +66,14 @@ namespace SCP_1
         }
         public void OnUseCoin(FlippingCoinEventArgs e)
         {
+            var random = new Random();
             Log.Info("触发扔硬币事件");
-            int luck = new Random().Next(1, 101);
+            int luck = random.Next(1, 101);
             string itemname = "";
             if (luck < 5)
             {
                 Log.Info("启用低概率事件");
-                luck = new Random().Next(0, 2);
+                luck = random.Next(0, 2);
                 if (luck == 0)
                 {
                     e.Player.ShowHint("<color=#fff>你被硬币砸死了!</color>", 10);
@@ -97,13 +104,13 @@ namespace SCP_1
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp049</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp049，运气：{scpLuck}");
                     }
-/*                    else if (scpLuck == 3)//电脑
-                    {
-                        e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp079, RoleChangeReason.Respawn, RoleSpawnFlags.None);
-                        e.Player.ShowHint("你变成了<color=#F4F245>Scp079</color>", 10);
-                        Log.Info($"{e.Player.Nickname}变成了Scp079，，运气：{scpLuck}");
-                    }*/
+                    /*                    else if (scpLuck == 3)//电脑
+                                        {
+                                            e.Player.DropItems();
+                                            e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp079, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                                            e.Player.ShowHint("你变成了<color=#F4F245>Scp079</color>", 10);
+                                            Log.Info($"{e.Player.Nickname}变成了Scp079，，运气：{scpLuck}");
+                                        }*/
                     else if (scpLuck == 3)
                     {
                         e.Player.DropItems();
@@ -139,10 +146,10 @@ namespace SCP_1
                     Log.Info("OK");
                 }
             }
-            if (luck >= 5 && luck < 21)//给物品
+            if (luck >= 5 && luck < 36)//给物品
             {
                 Log.Info("启用给物品事件");
-                int itemluck = new Random().Next(0, 7);
+                int itemluck = random.Next(0, 7);
                 if (itemluck <= 0)
                 {
                     e.Player.AddItem(ItemType.SCP500);
@@ -193,34 +200,40 @@ namespace SCP_1
                     e.Player.RemoveHeldItem();
                 }
             }
-            if (luck >= 20 && luck < 41)
+            else if (luck >= 36 && luck < 46)
             {
                 e.Player.ShowHint("什么都没有发生", 10);
             }
-            if (luck >= 40 && luck < 61)//开启核弹
+            else if (luck >= 46 && luck < 49)//开启核弹
             {
                 e.Player.ShowHint("启用核弹事件（未完成）");
                 Log.Info("启用核弹事件");//未生效
                 ActivatingWarheadPanelEventArgs e1 = new ActivatingWarheadPanelEventArgs(e.Player, true);
             }
-            if(luck >= 60 && luck < 81)//关灯
+            else if (luck >= 49 && luck < 52)//启用关灯事件
             {
-                e.Player.ShowHint("启用关灯事件（未完成）");
-                Log.Info("启用关灯事件");//未生效
-                RoomLightController controller = RoomLightController.Instances[0]; 
-                TurningOffLightsEventArgs e1 = new TurningOffLightsEventArgs(controller, 10.0f, true);
+                Log.Info("启用关灯事件");
+                var zone = (MapGeneration.FacilityZone)random.Next(1, 5);
+                e.Player.ShowHint($"在<color=#E04747>{zone.DisplayName()}</color>启用关灯事件");
+                foreach (RoomLightController instance in RoomLightController.Instances)
+                {
+                    if (instance.Room.Zone == zone)
+                    {
+                        instance.ServerFlickerLights(10.0f);
+                    }
+                }
             }
-            if(luck >= 80 && luck < 91)//启用随机事件
+            else if (luck >= 52 && luck < 65)//启用随机事件
             {
                 Log.Info("启用物品掉落+传送事件");
                 int dropluck = new Random().Next(0, 3);
-                if(dropluck == 0)
+                if (dropluck == 0)
                 {
                     e.Player.DropItems();
                     e.Player.ShowHint("你的物品掉落了", 10);
                     Log.Info($"玩家{e.Player.Nickname}的物品掉落，dropluck={dropluck}");
                 }
-                else if(dropluck == 1)
+                else if (dropluck == 1)
                 {
                     e.Player.ShowHint("你被传送了！未完成）", 10);
                     Log.Info($"玩家{e.Player.Nickname}被传送了，dropluck={dropluck}");
@@ -233,7 +246,7 @@ namespace SCP_1
                 }
 
             }
-            if(luck >= 91 && luck < 95)
+            else if (luck >= 65 && luck < 95)
             {
                 e.Player.RemoveHeldItem();
                 e.Player.ShowHint("硬币消失了！");
@@ -241,12 +254,34 @@ namespace SCP_1
             }
             else
             {
-                
                 Log.Info("已启用抽奖事件");
-
             }
             //待写抽奖项：交换两个玩家的背包，随机传送，交换两个玩家的位置
             Log.Info($"玩家{e.Player.Nickname}抽中了{itemname},{luck}");
+        }
+    }
+
+    public static class Extend
+    {
+        public static string DisplayName(this MapGeneration.FacilityZone zone)
+        {
+            var displayName = string.Empty;
+            switch (zone)
+            {
+                case MapGeneration.FacilityZone.LightContainment:
+                    displayName = "轻收容区";
+                    break;
+                case MapGeneration.FacilityZone.HeavyContainment:
+                    displayName = "重收容区";
+                    break;
+                case MapGeneration.FacilityZone.Entrance:
+                    displayName = "办公区大门";
+                    break;
+                case MapGeneration.FacilityZone.Surface:
+                    displayName = "地表";
+                    break;
+            }
+            return displayName;
         }
     }
 }
