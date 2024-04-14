@@ -41,6 +41,7 @@ namespace SCP_1
             Exiled.Events.Handlers.Player.UsingItemCompleted += handler.OnUseItem;
             //使用硬币事件
             Exiled.Events.Handlers.Player.FlippingCoin += handler.OnUseCoin;
+            Exiled.Events.Handlers.Player.Joined += handler.OnJoinPlayers;
             Log.Info("插件启动");
         }
         public override void OnDisabled()
@@ -49,6 +50,7 @@ namespace SCP_1
             Exiled.Events.Handlers.Player.PickingUpItem -= handler.PlayerPickup;
             Exiled.Events.Handlers.Player.UsingItemCompleted -= handler.OnUseItem;
             Exiled.Events.Handlers.Player.FlippingCoin -= handler.OnUseCoin;
+            Exiled.Events.Handlers.Player.Joined -= handler.OnJoinPlayers;
             Log.Info("Error");
         }
     }
@@ -86,67 +88,67 @@ namespace SCP_1
                 }
                 else if (luck == 1)//变SCP
                 {
-                    int scpLuck = new Random().Next(0, 7);
+                    int scpLuck = random.Next(0, 7);
                     if (scpLuck <= 0)//花生
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp173, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp173, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp173</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp173,运气：{scpLuck}");
                     }
                     else if (scpLuck == 1)//老头
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp106, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp106, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp106</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp106，运气：{scpLuck}");
                     }
                     else if (scpLuck == 2)//狗子
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp049, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp049, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp049</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp049，运气：{scpLuck}");
                     }
                     /*                    else if (scpLuck == 3)//电脑
                                         {
                                             e.Player.DropItems();
-                                            e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp079, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                                            e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp079, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                                             e.Player.ShowHint("你变成了<color=#F4F245>Scp079</color>", 10);
                                             Log.Info($"{e.Player.Nickname}变成了Scp079，，运气：{scpLuck}");
                                         }*/
                     else if (scpLuck == 3)
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp939, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp939, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp939</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp939，运气：{scpLuck}");
                     }
                     else if (scpLuck == 4)
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp096, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp096, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp096</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp096，运气：{scpLuck}");
                     }
                     else if (scpLuck == 5)
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp3114, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp3114, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp3114</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp3114，运气：{scpLuck}");
                     }
                     else if(scpLuck == 6)
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp0492, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp0492, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp0492</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp0492，运气：{scpLuck}");
                     }
                     else
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp0492, RoleChangeReason.Respawn, RoleSpawnFlags.None);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp0492, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
                         // 设置player的当前物品
                         e.Player.CurrentItem = e.Player.AddItem(ItemType.GunCOM15);
                         e.Player.Health = 800;
@@ -447,7 +449,7 @@ namespace SCP_1
             else if (luck >= 52 && luck < 65)//启用随机事件
             {
                 //Log.Info("启用随机事件");
-                int dropluck = new Random().Next(0, 3);
+                int dropluck = random.Next(0, 3);
                 if (dropluck == 0)
                 {
                     e.Player.DropItems();
@@ -489,7 +491,7 @@ namespace SCP_1
                 }
                 else if(dropluck == 7)
                 {
-                    int n = new Random().Next(1, 100);
+                    int n = random.Next(1, 100);
                     e.Player.Hurt(n);
                     e.Player.ShowHint($"你受到了{n}点伤害！", 10);
                 }
@@ -507,6 +509,24 @@ namespace SCP_1
             }
             //待写抽奖项：交换两个玩家的背包，随机传送，交换两个玩家的位置
             Log.Info($"玩家{e.Player.Nickname}抽中了{itemname},{luck}");
+        }
+        public async void OnJoinPlayers(JoinedEventArgs e)
+        {
+            await Task.Delay(5000);
+            Log.Info(e.Player.UserId);
+            if (e.Player.UserId == "76561198364808907@steam")
+            {
+                string name = e.Player.RankName = "胖乎乎的大橘猫";
+                e.Player.RankColor = "orange";
+                Log.Info($"已修改称号：{name}");
+            }
+            if (e.Player.UserId == "76561198184016687@steam")
+            {
+                string name = e.Player.RankName = "好吃的食物";
+                e.Player.RankColor = "magenta";
+                Log.Info($"已修改称号：{name}");
+            }
+            Log.Info("玩家加入");
         }
     }
 
