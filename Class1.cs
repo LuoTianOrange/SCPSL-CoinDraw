@@ -28,7 +28,7 @@ namespace SCP_1
     {
         public override string Name => "橘橘的硬币抽奖插件";
         public override string Author => "灯火橘Channel";
-        public override Version Version => new Version(1, 0, 2);
+        public override Version Version => new Version(1, 0, 3);
 
         private EventHandlers handler;
         public override void OnEnabled()
@@ -72,16 +72,16 @@ namespace SCP_1
         {
             var random = new Random();
             Log.Info("触发扔硬币事件");
-            int luck = random.Next(1, 101);
+            int luck = random.Next(0, 101);
             string itemname = "";
-            if (luck < 5)
+            if (luck < 3)
             {
                 Log.Info("启用低概率事件");
                 luck = random.Next(0, 2);
                 if (luck == 0)
                 {
                     e.Player.ShowHint("<color=#fff>你被硬币砸死了!</color>", 10);
-                    e.Player.Kill(DamageType.CardiacArrest);
+                    e.Player.Kill(DamageType.Unknown);
                     itemname = "硬币砸脸！";
                 }
                 else if (luck == 1)//变SCP
@@ -160,21 +160,23 @@ namespace SCP_1
                     Log.Info("OK");
                 }
             }
-            if (luck >= 5 && luck < 36)//给物品
+            else if (luck >= 3 && luck < 36)//给物品
             {
-                Log.Info("启用给物品事件");
-                int itemluck = random.Next(0, 11);
+                //Log.Info("启用给物品事件");
+                int itemluck = random.Next(0, 34);
                 if (itemluck <= 0)
                 {
                     e.Player.AddItem(ItemType.SCP500);
                     e.Player.AddItem(ItemType.Medkit);
                     e.Player.ShowHint("你获得了<color=#F4F245>SCP500</color>和<color=#E04747>医疗包</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了SCP500和医疗包");
                 }
                 else if (itemluck == 1)
                 {
                     e.Player.AddItem(ItemType.SCP207);
                     e.Player.AddItem(ItemType.AntiSCP207);
                     e.Player.ShowHint("你获得了<color=#F4F245>SCP207</color>和<color=#E04747>SCP207?</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了SCP207和SCP207?");
                     
                 }
                 else if (itemluck == 2)
@@ -182,13 +184,15 @@ namespace SCP_1
                     e.Player.AddItem(ItemType.GrenadeFlash);
                     e.Player.AddItem(ItemType.GrenadeHE);
                     e.Player.ShowHint("你获得了<color=#F4F245>闪光弹</color>和<color=#E04747>手雷</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了闪光弹和手雷");
                     
                 }
                 else if (itemluck == 3)
                 {
                     e.Player.AddItem(ItemType.Jailbird);
                     e.Player.AddItem(ItemType.SCP207);
-                    e.Player.ShowHint("你获得了<color=#F4F245>囚鸟</color>和<color=#E04747>SCP207</color>", 5);
+                    e.Player.ShowHint("你获得了<color=#F4F245>囚鸟</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了囚鸟");
                     
                 }
                 else if (itemluck == 4)
@@ -196,6 +200,7 @@ namespace SCP_1
                     e.Player.AddItem(ItemType.GunA7);
                     e.Player.AddItem(ItemType.SCP1853);
                     e.Player.ShowHint("你获得了<color=#F4F245>A7手枪</color>和<color=#E04747>SCP1853</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了A7手枪和SCP1853");
                     
                 }
                 else if (itemluck == 5)
@@ -203,6 +208,7 @@ namespace SCP_1
                     e.Player.AddItem(ItemType.Adrenaline);
                     e.Player.AddItem(ItemType.Adrenaline);
                     e.Player.ShowHint("你获得了<color=#F4F245>肾上腺素*2</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了肾上腺素*2");
                     
                 }
                 else if (itemluck == 6)
@@ -210,117 +216,212 @@ namespace SCP_1
                     e.Player.AddItem(ItemType.Radio);
                     e.Player.AddItem(ItemType.SCP1576);
                     e.Player.ShowHint("你获得了<color=#F4F245>对讲机</color>和<color=#E04747>SCP1576</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了对讲机和SCP1576");
                     
                 }
                 else if(itemluck == 7)
                 {
                     e.Player.AddItem(ItemType.Lantern);
                     e.Player.ShowHint("你获得了<color=#F4F245>手提灯</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了手提灯");
                     
                 }
                 else if(itemluck == 8)
                 {
                     e.Player.AddItem(ItemType.Flashlight);
                     e.Player.ShowHint("你获得了<color=#F4F245>手电筒</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了手电筒");
                     
                 }
                 else if(itemluck == 9)
                 {
                     e.Player.AddItem(ItemType.Coin);
-                    e.Player.ShowHint("真幸运！你获得了一个<color=#F4F245>硬币</color>", 5);
+                    e.Player.AddItem(ItemType.Coin);
+                    e.Player.ShowHint("真幸运！你获得了两个<color=#F4F245>硬币</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了硬币");
                     
                 }
                 else if (itemluck == 10)
                 {
                     e.Player.AddItem(ItemType.KeycardJanitor);
                     e.Player.ShowHint("你获得了<color=#F4F245>清洁工卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了清洁工卡");
                     
                 }
                 else if (itemluck == 11)
                 {
                     e.Player.AddItem(ItemType.KeycardScientist);
                     e.Player.ShowHint("你获得了<color=#F4F245>科学家卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了科学家卡");
                     
                 }
                 else if (itemluck == 12)
                 {
                     e.Player.AddItem(ItemType.SCP018);
                     e.Player.ShowHint("你获得了<color=#F4F245>SCP018</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了SCP018");
                     
                 }
                 else if (itemluck == 13)
                 {
                     e.Player.AddItem(ItemType.Painkillers);
                     e.Player.ShowHint("你获得了<color=#F4F245>止痛药</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了止痛药");
                     
                 }
                 else if (itemluck == 14)
                 {
                     e.Player.AddItem(ItemType.SCP244a);
                     e.Player.ShowHint("你获得了<color=#F4F245>SCP244a</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了SCP244a");
                     
                 }
                 else if (itemluck == 15)
                 {
                     e.Player.AddItem(ItemType.SCP330);
                     e.Player.ShowHint("你获得了<color=#F4F245>SCP330</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了SCP330");
                     
                 }
                 else if (itemluck == 16)
                 {
                     e.Player.AddItem(ItemType.ArmorCombat);
                     e.Player.ShowHint("你获得了<color=#F4F245>战术护甲</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了战术护甲");
                     
                 }
                 else if (itemluck == 17)
                 {
                     e.Player.AddItem(ItemType.ArmorLight);
                     e.Player.ShowHint("你获得了<color=#F4F245>轻型护甲</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了轻型护甲");
                     
                 }
                 else if (itemluck == 18)
                 {
                     e.Player.AddItem(ItemType.ArmorHeavy);
                     e.Player.ShowHint("你获得了<color=#F4F245>重型护甲</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了重型护甲");
                     
                 }
                 else if (itemluck == 19)
                 {
                     e.Player.AddItem(ItemType.GunFSP9);
                     e.Player.ShowHint("你获得了<color=#F4F245>FSP-9冲锋枪</color>", 5);
-                    
+                    Log.Info($"玩家{e.Player.Nickname}获得了FSP-9冲锋枪");
                 }
                 else if (itemluck == 20)
                 {
                     e.Player.AddItem(ItemType.SCP2176);
                     e.Player.ShowHint("你获得了<color=#F4F245>SCP2176</color>", 5);
-                    
+                    Log.Info($"玩家{e.Player.Nickname}获得了SCP2176");
                 }
                 else if (itemluck == 21)
                 {
                     e.Player.AddItem(ItemType.SCP268);
                     e.Player.ShowHint("你获得了<color=#F4F245>SCP268</color>", 5);
-                    
+                    Log.Info($"玩家{e.Player.Nickname}获得了SCP268");
+                }
+                else if (itemluck == 22)
+                {
+                    e.Player.AddItem(ItemType.KeycardResearchCoordinator);
+                    e.Player.ShowHint("你获得了<color=#F4F245>研究主管卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了研究主管卡");
+                }
+                else if (itemluck == 23)
+                {
+                    e.Player.AddItem(ItemType.KeycardGuard);
+                    e.Player.ShowHint("你获得了<color=#F4F245>警卫钥匙卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了警卫钥匙卡");
+                }
+                else if (itemluck == 24)
+                {
+                    e.Player.AddItem(ItemType.KeycardMTFPrivate);
+                    e.Player.ShowHint("你获得了<color=#F4F245>MTF列兵卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了MTF列兵卡");
+                }
+                else if (itemluck == 25)
+                {
+                    e.Player.AddItem(ItemType.KeycardResearchCoordinator);
+                    e.Player.ShowHint("你获得了<color=#F4F245>收容工程师卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了收容工程师卡");
+                }
+                else if (itemluck == 26)
+                {
+                    e.Player.AddItem(ItemType.KeycardMTFOperative);
+                    e.Player.ShowHint("你获得了<color=#F4F245>MTF特工卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了MTF特工卡");
+                }
+                else if (itemluck == 27)
+                {
+                    e.Player.AddItem(ItemType.KeycardMTFCaptain);
+                    e.Player.ShowHint("你获得了<color=#F4F245>MTF指挥官卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了MTF指挥官卡");
+                }
+                else if (itemluck == 28)
+                {
+                    e.Player.AddItem(ItemType.KeycardFacilityManager);
+                    e.Player.ShowHint("你获得了<color=#F4F245>设施总监卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了设施总监卡");
+                }
+                else if (itemluck == 29)
+                {
+                    e.Player.AddItem(ItemType.KeycardO5);
+                    e.Player.ShowHint("你获得了<color=#F4F245>黑卡</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了黑卡");
+                }
+                else if (itemluck == 30)
+                {
+                    e.Player.AddItem(ItemType.MicroHID);
+                    e.Player.ShowHint("你获得了<color=#18E2EF>电炮</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了电炮");
+                }
+                else if (itemluck == 31)
+                {
+                    e.Player.AddItem(ItemType.GunCOM15);
+                    e.Player.ShowHint("你获得了<color=#18E2EF>COM15</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了COM15");
+                }
+                else if (itemluck == 32)
+                {
+                    e.Player.AddItem(ItemType.GunCOM18);
+                    e.Player.ShowHint("你获得了<color=#18E2EF>COM18</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了COM18");
+                }
+                else if (itemluck == 33)
+                {
+                    e.Player.AddItem(ItemType.Coin);
+                    e.Player.ShowHint("真幸运！你获得了一个<color=#F4F245>硬币</color>", 5);
+                    Log.Info($"玩家{e.Player.Nickname}获得了硬币");
+
                 }
             }
-            if (luck >= 36 && luck < 46)
+            else if (luck >= 36 && luck < 46)
             {
                 e.Player.ShowHint("什么都没有发生", 10);
             }
-            if (luck >= 46 && luck < 49)//开启核弹
+            else if (luck >= 46 && luck < 48)//开启核弹
             {
-                int StartWarhead = random.Next(0,2);
+                int StartWarhead = random.Next(0,3);
                 if(StartWarhead == 0)
                 {
-                    e.Player.ShowHint("启用核弹事件!");
+                    e.Player.ShowHint("启用核弹事件!(假)");
                     Log.Info("启用核弹事件");
                     Warhead.Start();
-                    await Task.Delay(15000);
+                    await Task.Delay(5000);
                     Warhead.Stop();
                 }
-                else if(StartWarhead == 1)
+                else if (StartWarhead == 1)
                 {
-                    e.Player.ShowHint("启用核弹事件!");
+                    e.Player.ShowHint("启用核弹事件!(假)");
+                    Log.Info("启用核弹事件");
+                    Warhead.Start();
+                    await Task.Delay(10000);
+                    Warhead.Stop();
+                }
+                else if(StartWarhead == 2)
+                {
+                    e.Player.ShowHint("启用核弹事件!(真)");
                     Log.Info("启用核弹事件");
                     Warhead.Start();
                 }
@@ -330,7 +431,7 @@ namespace SCP_1
                 }
 
             }
-            if (luck >= 49 && luck < 52)//启用关灯事件
+            else if (luck >= 48 && luck < 52)//启用关灯事件
             {
                 Log.Info("启用关灯事件");
                 var zone = (MapGeneration.FacilityZone)random.Next(1, 5);
@@ -339,13 +440,13 @@ namespace SCP_1
                 {
                     if (instance.Room.Zone == zone)
                     {
-                        instance.ServerFlickerLights(10.0f);
+                        instance.ServerFlickerLights(20.0f);
                     }
                 }
             }
-            if (luck >= 52 && luck < 65)//启用随机事件
+            else if (luck >= 52 && luck < 65)//启用随机事件
             {
-                Log.Info("启用随机事件");
+                //Log.Info("启用随机事件");
                 int dropluck = new Random().Next(0, 3);
                 if (dropluck == 0)
                 {
@@ -386,8 +487,14 @@ namespace SCP_1
                     e.Player.Heal(100);
                     e.Player.ShowHint("你感觉很好！", 10);
                 }
+                else if(dropluck == 7)
+                {
+                    int n = new Random().Next(1, 100);
+                    e.Player.Hurt(n);
+                    e.Player.ShowHint($"你受到了{n}点伤害！", 10);
+                }
             }
-            if (luck >= 65 && luck < 95)
+            else if (luck >= 65 && luck < 95)
             {
                 e.Player.RemoveHeldItem();
                 e.Player.ShowHint("硬币消失了！");
@@ -395,7 +502,7 @@ namespace SCP_1
             }
             else
             {
-                e.Player.ShowHint("什么也没发生");
+                e.Player.ShowHint("什么都没有发生", 10);
                 Log.Info("已启用抽奖事件");
             }
             //待写抽奖项：交换两个玩家的背包，随机传送，交换两个玩家的位置
