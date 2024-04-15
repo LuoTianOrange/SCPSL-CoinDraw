@@ -41,7 +41,11 @@ namespace SCP_1
             Exiled.Events.Handlers.Player.UsingItemCompleted += handler.OnUseItem;
             //使用硬币事件
             Exiled.Events.Handlers.Player.FlippingCoin += handler.OnUseCoin;
+            //玩家加入事件
             Exiled.Events.Handlers.Player.Joined += handler.OnJoinPlayers;
+            //角色重生事件
+            // Exiled.Events.Handlers.Player.Spawned += handler.OnSpawned;
+
             Log.Info("插件启动");
         }
         public override void OnDisabled()
@@ -51,6 +55,7 @@ namespace SCP_1
             Exiled.Events.Handlers.Player.UsingItemCompleted -= handler.OnUseItem;
             Exiled.Events.Handlers.Player.FlippingCoin -= handler.OnUseCoin;
             Exiled.Events.Handlers.Player.Joined -= handler.OnJoinPlayers;
+            // Exiled.Events.Handlers.Player.Spawned -= handler.OnSpawned;
             Log.Info("Error");
         }
     }
@@ -134,7 +139,7 @@ namespace SCP_1
                     else if (scpLuck == 5)
                     {
                         e.Player.DropItems();
-                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp3114, RoleChangeReason.Respawn, RoleSpawnFlags.UseSpawnpoint);
+                        e.Player.RoleManager.ServerSetRole(RoleTypeId.Scp3114, RoleChangeReason.Respawn, RoleSpawnFlags.None);
                         e.Player.ShowHint("你变成了<color=#F4F245>Scp3114</color>", 10);
                         Log.Info($"{e.Player.Nickname}变成了Scp3114，运气：{scpLuck}");
                     }
@@ -510,24 +515,12 @@ namespace SCP_1
             //待写抽奖项：交换两个玩家的背包，随机传送，交换两个玩家的位置
             Log.Info($"玩家{e.Player.Nickname}抽中了{itemname},{luck}");
         }
-        public async void OnJoinPlayers(JoinedEventArgs e)
+        public void OnJoinPlayers(JoinedEventArgs e)
         {
-            await Task.Delay(5000);
-            Log.Info(e.Player.UserId);
-            if (e.Player.UserId == "76561198364808907@steam")
-            {
-                string name = e.Player.RankName = "胖乎乎的大橘猫";
-                e.Player.RankColor = "orange";
-                Log.Info($"已修改称号：{name}");
-            }
-            if (e.Player.UserId == "76561198184016687@steam")
-            {
-                string name = e.Player.RankName = "好吃的食物";
-                e.Player.RankColor = "magenta";
-                Log.Info($"已修改称号：{name}");
-            }
             Log.Info("玩家加入");
         }
+        
+
     }
 
     public static class Extend
